@@ -54,11 +54,6 @@ app.get('notes/:noteId', (req, res) => {
   });
 });
 
-// // Обробка JSON
-// app.post('notes', (req, res) => {
-//   res.status(200).json({});
-// });
-
 // ^ Mid-re 404 (після всіх маршрутів)
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
