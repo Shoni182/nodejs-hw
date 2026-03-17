@@ -29,6 +29,10 @@ app.use(
     },
   }),
 );
+//
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Hello world1' });
+});
 
 //: Запуск сервера
 app.listen(PORT, () => {
