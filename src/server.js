@@ -23,16 +23,12 @@ app.use(
         translateTime: 'HH:MM:ss',
         ignore: 'pid,hostname',
         messageFormat:
-          '{req.method} {req.url} {res.statudCode} - {responseTime}ms',
-        hodeObject: true,
+          '{req.method} {req.url} {res.statusCode} - {responseTime}ms',
+        hideObject: true,
       },
     },
   }),
 );
-//
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Hello world1' });
-});
 
 //: Запуск сервера
 app.listen(PORT, () => {
@@ -44,7 +40,7 @@ app.listen(PORT, () => {
 
 app.get('/notes', (req, res) => {
   res.status(200).json({
-    message: 'Retieved all notes',
+    message: 'Retrieved all notes',
   });
 });
 
@@ -58,19 +54,6 @@ app.get('/notes/:noteId', (req, res) => {
   });
 });
 
-// обробка JSON
-
-// app.post('notes', (req, res) => {
-//   res.status(200).json({
-//     message: 'Note created',
-//   });
-// });
-
-// ^ Mid-re 404 (після всіх маршрутів)
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
-
 // ^ Обробка помилок
 
 app.get('/test-error', (req, res) => {
@@ -78,11 +61,16 @@ app.get('/test-error', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  const isProd = procces.env.NODE_ENV === 'production';
+  const isProd = process.env.NODE_ENV === 'production';
 
   res.status(500).json({
     message: isProd
       ? 'Someting went wrong. Please try again later'
       : err.message,
   });
+});
+
+// ^ Mid-re 404 (після всіх маршрутів)
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
