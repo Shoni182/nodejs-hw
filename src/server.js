@@ -46,13 +46,21 @@ app.get('/notes', (req, res) => {
 
 // note ID
 
-app.get('notes/:noteId', (req, res) => {
+app.get('/notes/:noteId', (req, res) => {
   const { noteId } = req.params;
   const id_param = noteId;
   res.status(200).json({
     message: `Retrieved note with ID: ${id_param}`,
   });
 });
+
+// обробка JSON
+
+// app.post('notes', (req, res) => {
+//   res.status(200).json({
+//     message: 'Note created',
+//   });
+// });
 
 // ^ Mid-re 404 (після всіх маршрутів)
 app.use((req, res) => {
