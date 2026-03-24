@@ -6,29 +6,9 @@ import 'dotenv/config';
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
-// Міддлвер для парсингу JSON
+//: General middlewares
 app.use(express.json());
-
-// Міддлвер для CORS
 app.use(cors());
-
-// Для логування запитів
-app.use(
-  pino({
-    level: 'info',
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        colorize: true,
-        translateTime: 'HH:MM:ss',
-        ignore: 'pid,hostname',
-        messageFormat:
-          '{req.method} {req.url} {res.statusCode} - {responseTime}ms',
-        hideObject: true,
-      },
-    },
-  }),
-);
 
 //: Запуск сервера
 app.listen(PORT, () => {
