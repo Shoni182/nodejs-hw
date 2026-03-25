@@ -14,11 +14,9 @@ const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 //^ General middlewares
-app.use(logger);
-app.use(
-  express.json({ type: ['application/json', 'application/vnd.api+json'] }),
-);
 app.use(cors());
+app.use(logger);
+app.use(express.json());
 
 //^ Routs
 app.use(notesRoutes);
