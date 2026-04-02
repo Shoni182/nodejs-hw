@@ -19,12 +19,10 @@ export const noteIdSchema = {
 //^ GET all notes
 export const getAllNotesSchema = {
   [Segments.QUERY]: Joi.object({
-    page: Joi.number().integer().min(1),
-    perPage: Joi.number().integer().min(5).max(20),
+    page: Joi.number().integer().min(1).max(10),
+    perPage: Joi.number().integer().min(1).max(10),
     tag: Joi.string().valid(...TAGS),
     search: Joi.string().trim().allow(''),
-    page: Joi.number().integer().min(1),
-    perPage: Joi.number().integer().min(5).max(20),
   }),
 };
 
@@ -51,7 +49,7 @@ export const createNoteSchema = {
 //^ UPDATE note
 export const updateNoteSchema = {
   [Segments.PARAMS]: Joi.object({
-    studentId: Joi.string().custom(objectIdValidator).required(),
+    noteId: Joi.string().custom(objectIdValidator).required(),
   }),
 
   [Segments.BODY]: Joi.object({
@@ -60,7 +58,7 @@ export const updateNoteSchema = {
       'string.min': 'Title should have at least 1 characters',
     }),
     content: Joi.string().allow('').messages({
-      'string.base': 'Title must be a string',
+      'string.base': 'Content must be a string',
     }),
     tag: Joi.string()
       .valid(...TAGS)
@@ -68,5 +66,5 @@ export const updateNoteSchema = {
         'any.only':
           'Tag must be one of: Work,Personal,Meeting,Shopping,Ideas,Travel,Finance,Health,Important,Todo',
       }),
-  }).min(1),
+  }).or('title', 'content', 'tag'),
 };
