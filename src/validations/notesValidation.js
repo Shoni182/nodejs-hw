@@ -1,5 +1,5 @@
 import { Joi, Segments } from 'celebrate';
-import { ...TAGS } from '../constants/tags.js';
+import { TAGS } from '../constants/tags.js';
 
 //^ Custom object ID
 const objectIdValidator = (value, helpers) => {
@@ -36,10 +36,12 @@ export const createNoteSchema = {
     content: Joi.string().allow('').messages({
       'string.base': 'Title must be a string',
     }),
-    tag: Joi.string().valid(...TAGS).messages({
-      'any.only':
-        'Tag must be one of: Work,Personal,Meeting,Shopping,Ideas,Travel,Finance,Health,Important,Todo',
-    }),
+    tag: Joi.string()
+      .valid(...TAGS)
+      .messages({
+        'any.only':
+          'Tag must be one of: Work,Personal,Meeting,Shopping,Ideas,Travel,Finance,Health,Important,Todo',
+      }),
   }),
 };
 
@@ -57,9 +59,11 @@ export const updateNoteSchema = {
     content: Joi.string().allow('').messages({
       'string.base': 'Title must be a string',
     }),
-    tag: Joi.string().valid(...TAGS).messages({
-      'any.only':
-        'Tag must be one of: Work,Personal,Meeting,Shopping,Ideas,Travel,Finance,Health,Important,Todo',
-    }),
+    tag: Joi.string()
+      .valid(...TAGS)
+      .messages({
+        'any.only':
+          'Tag must be one of: Work,Personal,Meeting,Shopping,Ideas,Travel,Finance,Health,Important,Todo',
+      }),
   }).min(1),
 };
