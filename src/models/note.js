@@ -34,4 +34,8 @@ const noteSchema = new Schema(
   { timestamps: true },
 );
 
+// Додаємо текстовий індекс: кажемо MongoDB,
+// що по полю name можна робити $text
+noteSchema.index({ title: 'text' }, { content: 'text' });
+
 export const Note = model('Note', noteSchema);

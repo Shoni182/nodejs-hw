@@ -3,8 +3,29 @@ import createHttpError from 'http-errors';
 
 //^ GET Notes
 export const getAllNotes = async (req, res) => {
-  const notes = await Note.find();
-  res.status(200).json(notes);
+  const { page = 1, perPage = 10, search, tag } = req.query;
+
+  const skip = (page - 1) * perPage;
+  const notesQuery = Note.find();
+
+  // Filer
+  if (tag) {
+    notesQuery.where('tag').equals(tag);
+  }
+
+  if (search) {
+    notesQuery.where({ $text: { $search: search } });
+  }
+
+  // Виконуємо одразу два запити паралельно
+  const [totalNotes, notes] = await Promise.all([
+    notesQuery.clone().countDocuments(),
+    notesQuery.skip(skip).limit(perPage),
+  ]);
+
+  // Обчислюжмо загальну кількість "сторінок"
+  const totalPages = Math.ceil(totalNotes / perPage);
+  res.status(200).json({ page, perPage, totalNotes, totalPages, notes });
 };
 
 //^ GET Note:id

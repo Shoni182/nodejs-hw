@@ -7,6 +7,13 @@ import {
   updateNote,
 } from '../controllers/notesController.js';
 
+import {
+  noteIdSchema,
+  getAllNotesSchema,
+  createNoteSchema,
+  updateNoteSchema,
+} from '../validations/notesValidation.js';
+
 const router = Router();
 
 //
