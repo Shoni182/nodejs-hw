@@ -1,5 +1,5 @@
 import { Joi, Segments } from 'celebrate';
-import { TAGS } from '../constants/tags.js';
+import { ...TAGS } from '../constants/tags.js';
 
 //^ Custom object ID
 const objectIdValidator = (value, helpers) => {
@@ -19,8 +19,8 @@ export const noteIdSchema = {
 export const getAllNotesSchema = {
   [Segments.BODY]: Joi.object({
     page: Joi.number().integer().min(1),
-    perPage: Joi.number().integer.min(5).max(20),
-    tag: Joi.string().valid(TAGS),
+    perPage: Joi.number().integer().min(5).max(20),
+    tag: Joi.string().valid(...TAGS),
     search: Joi.string().trim().allow(''),
   }),
 };
@@ -36,7 +36,7 @@ export const createNoteSchema = {
     content: Joi.string().allow('').messages({
       'string.base': 'Title must be a string',
     }),
-    tag: Joi.string().valid(TAGS).messages({
+    tag: Joi.string().valid(...TAGS).messages({
       'any.only':
         'Tag must be one of: Work,Personal,Meeting,Shopping,Ideas,Travel,Finance,Health,Important,Todo',
     }),
@@ -57,7 +57,7 @@ export const updateNoteSchema = {
     content: Joi.string().allow('').messages({
       'string.base': 'Title must be a string',
     }),
-    tag: Joi.string().valid(TAGS).messages({
+    tag: Joi.string().valid(...TAGS).messages({
       'any.only':
         'Tag must be one of: Work,Personal,Meeting,Shopping,Ideas,Travel,Finance,Health,Important,Todo',
     }),
