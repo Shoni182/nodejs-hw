@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import { errors } from 'celebrate';
 // DB
 import { connectMongoDB } from './db/connectMongoDB.js';
 // middlewares
@@ -14,17 +15,18 @@ const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 //^ General middlewares
-app.use(logger);
-app.use(
-  express.json({ type: ['application/json', 'application/vnd.api+json'] }),
-);
 app.use(cors());
+app.use(logger);
+app.use(express.json());
 
 //^ Routs
 app.use(notesRoutes);
 
 //^ 404 — якщо маршрут не знайдено
 app.use(notFoundHandler);
+
+//^ // обробка помилок від celebrate (валідація)
+app.use(errors());
 
 //^ Помилка під час запиту
 app.use(errorHandler);
