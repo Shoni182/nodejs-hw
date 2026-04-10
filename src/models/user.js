@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
@@ -21,7 +21,7 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-const User = mongoose.model('User', userSchema);
+export const User = model('User', userSchema);
 
 userSchema.pre('save', function () {
   if (!this.username) {
