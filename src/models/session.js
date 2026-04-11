@@ -7,7 +7,7 @@ const sessionSchema = new Schema(
       required: true,
       ref: 'User',
     },
-    accesToken: {
+    accessToken: {
       type: String,
       required: true,
     },
@@ -21,7 +21,7 @@ const sessionSchema = new Schema(
     },
     refreshTokenValidUntil: {
       type: Date,
-      retuired: true,
+      required: true,
     },
   },
   { timestamps: true },

@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import { errors } from 'celebrate';
+import cookieParser from 'cookie-parser';
 // DB
 import { connectMongoDB } from './db/connectMongoDB.js';
 // middlewares
@@ -10,16 +11,19 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 // routes
 import notesRoutes from './routes/notesRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 //^ General middlewares
 app.use(cors());
+app.use(cookieParser());
 app.use(logger);
 app.use(express.json());
 
 //^ Routs
+app.use(authRoutes);
 app.use(notesRoutes);
 
 //^ 404 — якщо маршрут не знайдено

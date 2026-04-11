@@ -15,13 +15,11 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      minLenght: 8,
+      minLength: 8,
     },
   },
   { timestamps: true },
 );
-
-export const User = model('User', userSchema);
 
 userSchema.pre('save', function () {
   if (!this.username) {
@@ -34,3 +32,5 @@ userSchema.methods.toJSON = function () {
   delete obj.password;
   return obj;
 };
+
+export const User = model('User', userSchema);

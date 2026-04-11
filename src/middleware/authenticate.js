@@ -33,7 +33,7 @@ export const authenticate = async (req, res, next) => {
   // 5. Якщо з токеном все. добре і сесія існує
   // шукаємо користувача
 
-  const user = await User.foundById(session.userId);
+  const user = await User.findById(session.userId);
 
   // 6. Якщо користувача не знайдено
 
