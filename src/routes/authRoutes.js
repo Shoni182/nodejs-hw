@@ -6,15 +6,13 @@ import {
   loginUserSchema,
 } from '../validations/authValidation.js';
 
+//: Routs
 import {
   registerUser,
   loginUser,
   logoutUser,
   refreshUserSession,
 } from '../controllers/authController.js';
-
-//: Routs
-import registerUser from '../controllers/authController.js';
 
 const router = Router();
 
