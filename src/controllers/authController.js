@@ -97,8 +97,7 @@ export const refreshUserSession = async (req, res) => {
     throw createHttpError(401, 'Session not found');
   }
   //Якщо сесія існує перевіряємо валідність рефреш токена
-  const isSessionTokenExpored =
-    new Date() > new Date(session.refreshTokenValidUntil);
+  const isSessionTokenExpored = new Date() > new Date(session.refreshTokenValidUntil);
 
   //Якщо термін дії рефреш токена вийшов, повертаємо помилку
   if (isSessionTokenExpored) {
@@ -133,7 +132,7 @@ export const requestResetEmail = async (req, res, next) => {
 
   // Користувач є — генеруємо короткоживучий JWT і відправляємо лист
   const jwtToken = jwt.sign({ sub: user._id, email }, process.env.JWT_SECRET, {
-    expiresIn: '15',
+    expiresIn: '15m',
   });
 
   // Формулюємо шлях до шаблона
@@ -156,10 +155,7 @@ export const requestResetEmail = async (req, res, next) => {
       html,
     });
   } catch {
-    throw createHttpError(
-      500,
-      'Failed to send the email, please try again later.',
-    );
+    throw createHttpError(500, 'Failed to send the email, please try again later.');
   }
 
   res.status(200).json({
@@ -178,7 +174,7 @@ export const resetPassword = async (req, res) => {
     throw createHttpError(401, 'Invalid or expired token');
   }
 
-  const user = await User.findById({ _id: payload.sub, email: payload.email });
+  const user = await User.findOne({ _id: payload.sub, email: payload.email });
 
   if (!user) {
     throw createHttpError(404, 'User not found');
