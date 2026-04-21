@@ -7,8 +7,6 @@ const objectIdValidator = (value, helpers) => {
   return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
 };
 
-//^
-
 //^ NoteId
 export const noteIdSchema = {
   [Segments.PARAMS]: Joi.object({

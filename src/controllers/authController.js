@@ -4,6 +4,13 @@ import bcrypt from 'bcrypt';
 import { createSession, setSessionCookies } from '../services/auth.js';
 import { Session } from '../models/session.js';
 
+import jwt from 'jsonwebtoken';
+import handlebars from 'handlebars';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import { sendEmail } from '../utils/sendMail.js';
+
+//^ Registe User
 export const registerUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -33,6 +40,7 @@ export const registerUser = async (req, res) => {
   res.status(201).json(newUser);
 };
 
+//^ Login User
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -62,6 +70,7 @@ export const loginUser = async (req, res) => {
   res.status(200).json(user);
 };
 
+//^ LogOut User
 export const logoutUser = async (req, res) => {
   const { sessionId } = req.cookies;
   if (sessionId) {
@@ -75,6 +84,7 @@ export const logoutUser = async (req, res) => {
   res.status(204).send();
 };
 
+//^ Refresh User Session
 export const refreshUserSession = async (req, res) => {
   // Знаходимо айді та рефреш токен в кокісах сесії
   const session = await Session.findOne({
@@ -83,7 +93,6 @@ export const refreshUserSession = async (req, res) => {
   });
 
   // якщо сесії немає повертаємо помилку
-
   if (!session) {
     throw createHttpError(401, 'Session not found');
   }
@@ -97,18 +106,63 @@ export const refreshUserSession = async (req, res) => {
   }
 
   // Якщо всі перевірки пройшли добре, видаляємо поточну сесію
-
   await Session.deleteOne({
     _id: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
   });
 
   // Створюємо нову сесію та додаємо кукі
-
   const newSession = await createSession(session.userId);
   setSessionCookies(res, newSession);
 
   res.status(200).json({
     message: 'Session refreshed',
+  });
+};
+
+// ^ requestResetEmail
+export const requestResetEmail = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  // Якщо користувача нема — навмисно повертаємо ту саму "успішну"
+  if (!user) {
+    return res.status(200).json({
+      message: 'Password reset email sent successfully',
+    });
+  }
+
+  // Користувач є — генеруємо короткоживучий JWT і відправляємо лист
+  const jwtToken = jwt.sign({ sub: user._id, email }, process.env.JWT_SECRET, {
+    expiresIn: '15',
+  });
+
+  // Формулюємо шлях до шаблона
+  const templatePath = path.resolve('src/templates/reset-password-email.html');
+  // Читаємо Шаблон
+  const templateSource = await fs.readFile(templatePath, 'utf-8');
+  //
+  const template = handlebars.compile(templateSource);
+
+  const html = template({
+    name: user.username,
+    link: `${process.env.FRONTEND_DOMAIN}/reset-password?token=${jwtToken}`,
+  });
+
+  try {
+    await sendEmail({
+      from: process.env.SMTP_FROM,
+      to: email,
+      subject: 'Reset your password',
+      html,
+    });
+  } catch {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
+
+  res.status(200).json({
+    message: 'Password reset email sent successfully',
   });
 };
