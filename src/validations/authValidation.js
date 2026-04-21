@@ -18,9 +18,17 @@ export const loginUserSchema = {
 };
 
 //^ requestResetEmailSchema
-
 export const requestResetEmailSchema = {
   [Segments.BODY]: Joi.object({
     email: Joi.string().email().required(),
+  }),
+};
+
+//^ Reset Password
+
+export const resetPasswordSchema = {
+  [Segments.BOYD]: Joy.object({
+    password: Joi.string().required(),
+    token: Joi.string().required(),
   }),
 };
