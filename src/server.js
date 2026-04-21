@@ -25,6 +25,7 @@ app.use(express.json());
 //^ Routs
 app.use(authRoutes);
 app.use(notesRoutes);
+app.use(userRoutes);
 
 //^ 404 — якщо маршрут не знайдено
 app.use(notFoundHandler);
