@@ -27,7 +27,7 @@ export const requestResetEmailSchema = {
 //^ Reset Password
 
 export const resetPasswordSchema = {
-  [Segments.BOYD]: Joy.object({
+  [Segments.BODY]: Joi.object({
     password: Joi.string().required(),
     token: Joi.string().required(),
   }),

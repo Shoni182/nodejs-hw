@@ -168,7 +168,6 @@ export const requestResetEmail = async (req, res, next) => {
 };
 
 //^ resetPassword
-
 export const resetPassword = async (req, res) => {
   const { password, token } = req.body;
 
