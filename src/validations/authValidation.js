@@ -1,7 +1,7 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 
-//^ register
+//^ Register
 export const registerUserSchema = {
   [Segments.BODY]: Joi.object({
     email: Joi.string().email().required(),
@@ -9,7 +9,7 @@ export const registerUserSchema = {
   }),
 };
 
-//^ login
+//^ Login
 export const loginUserSchema = {
   [Segments.BODY]: Joi.object({
     email: Joi.string().email().required(),
@@ -17,7 +17,7 @@ export const loginUserSchema = {
   }),
 };
 
-//^ requestResetEmailSchema
+//^ Request Reset Email Schema
 export const requestResetEmailSchema = {
   [Segments.BODY]: Joi.object({
     email: Joi.string().email().required(),

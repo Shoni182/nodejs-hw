@@ -4,27 +4,22 @@ import { User } from '../models/user.js';
 
 export const authenticate = async (req, res, next) => {
   //1.Перевіряємо наявність accessToken
-
   if (!req.cookies.accessToken) {
     throw createHttpError(401, 'Missing access token ');
   }
 
   // 2. Якщо access токен існує, шукаємо сесію
-
   const session = await Session.findOne({
     accessToken: req.cookies.accessToken,
   });
 
   //3. Якщо такої сесії нема, повертаємо помилку
-
   if (!session) {
     throw createHttpError(401, 'Session not found');
   }
 
   // 4. Перевіряємо термін дії access токкена
-
-  const isAccessTokenExpored =
-    new Date() > new Date(session.accessTokenValidUntil);
+  const isAccessTokenExpored = new Date() > new Date(session.accessTokenValidUntil);
 
   if (isAccessTokenExpored) {
     throw createHttpError(401, 'Access token expired');
@@ -32,11 +27,9 @@ export const authenticate = async (req, res, next) => {
 
   // 5. Якщо з токеном все. добре і сесія існує
   // шукаємо користувача
-
   const user = await User.findById(session.userId);
 
   // 6. Якщо користувача не знайдено
-
   if (!user) {
     throw createHttpError(401);
   }
